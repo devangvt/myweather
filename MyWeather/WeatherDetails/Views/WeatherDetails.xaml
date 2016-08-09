@@ -1,0 +1,131 @@
+﻿<UserControl x:Class="DevangsWeather.Details.Views.WeatherDetails"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+             xmlns:prism="http://prismlibrary.com/"            
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:commonInfra="clr-namespace:DevangsWeather.CommonInfra;assembly=WeatherCommonInfra"
+             xmlns:local="clr-namespace:DevangsWeather.Details.Views"
+             mc:Ignorable="d"              
+             d:DesignHeight="300" d:DesignWidth="700"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Green.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
+            <commonInfra:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <DockPanel>
+            <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                          Mode="PrimaryMid" DockPanel.Dock="Top">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding CurrentCity}" Style="{StaticResource MaterialDesignTitleTextBlock}"></TextBlock>
+            </materialDesign:ColorZone>
+            <dragablz:TabablzControl Margin="8" >
+                <dragablz:TabablzControl.InterTabController>
+                    <dragablz:InterTabController />
+                </dragablz:TabablzControl.InterTabController>
+                <TabItem >
+                    <TabItem.Header >
+                        <StackPanel  Orientation="Horizontal">
+                            <TextBlock FontSize="20" Width="200" TextAlignment="Center">Historic</TextBlock>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <ListView ItemsSource="{Binding WeatherHistory}" Background="{DynamicResource MaterialDesignPaper}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding CurrentWeather.BasicTempreture.TempMin}"></TextBlock>
+                                    <TextBlock Text="{Binding CurrentWeather.BasicTempreture.TempMan}"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </TabItem>
+                <TabItem   IsSelected="True">
+                    <TabItem.Header>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontSize="20" Width="200" TextAlignment="Center">Current</TextBlock>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel Orientation="Vertical" >
+                        <materialDesign:Card UniformCornerRadius="14" Padding="4"
+                       Visibility="{Binding IsLoading,Converter={StaticResource BoolToVisibilityConverter }}"
+                      VerticalAlignment="Center" HorizontalAlignment="Center" Margin="12 12 12 12">
+                            <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" 
+                         Value="50" Height="50" Width="50"
+                         IsIndeterminate="True"                         
+                      />
+                        </materialDesign:Card>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <TextBlock FontSize="30" Text="{Binding CurrentWeather.City.CityName}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <TextBlock FontSize="20" Text="Current Tempreture"></TextBlock>
+                            <TextBlock FontSize="30" Text="{Binding CurrentWeather.CurrentWeather.BasicTempreture.Temp}"></TextBlock>
+                        </StackPanel>
+
+
+                    </StackPanel>
+                </TabItem>
+                <TabItem >
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontSize="20" Width="200" TextAlignment="Center">Forecast</TextBlock>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="100"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ListView  Grid.Row="0" HorizontalAlignment="Center" Background="{DynamicResource MaterialDesignPaper}" ItemsSource="{Binding ForecastWeather.Forecast}">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"></StackPanel>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical">
+                                        <materialDesign:Card Margin="4 4 0 0" Background="{DynamicResource PrimaryHueDarkBrush}"
+                  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                  Padding="8" UniformCornerRadius="6">
+                                            <TextBlock Text="{Binding BasicTempreture.TempMax}"></TextBlock>
+                                        </materialDesign:Card>
+                                        <materialDesign:Card Margin="4 4 0 0" Background="{DynamicResource PrimaryHueDarkBrush}"
+                  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                  Padding="8" UniformCornerRadius="6">
+                                            <TextBlock Text="{Binding BasicTempreture.TempMin}"></TextBlock>
+                                        </materialDesign:Card>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                        <lvc:CartesianChart Grid.Row="1" Series="{Binding SeriesCollection}" LegendLocation="Right" >
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="Tempreture in Degrees" ></lvc:Axis>
+                            </lvc:CartesianChart.AxisY>
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Title="Days" Labels="{Binding Labels}"></lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+                        </lvc:CartesianChart>
+                    </Grid>
+                </TabItem>
+            </dragablz:TabablzControl>
+        </DockPanel>
+    </Grid>
+</UserControl>
