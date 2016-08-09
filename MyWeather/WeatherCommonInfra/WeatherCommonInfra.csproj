@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateToDayConverter.cs" />
     <Compile Include="BoolToVisibilityConverter.cs" />
     <Compile Include="IconToSourceConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

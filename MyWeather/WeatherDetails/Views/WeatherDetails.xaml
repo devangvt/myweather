@@ -24,6 +24,7 @@
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
             <commonInfra:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <commonInfra:DateToDayConverter x:Key="DateToDayConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -88,7 +89,7 @@
                     </TabItem.Header>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="100"/>
+                            <RowDefinition Height="130"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <ListView  Grid.Row="0" HorizontalAlignment="Center" Background="{DynamicResource MaterialDesignPaper}" ItemsSource="{Binding ForecastWeather.Forecast}">
@@ -103,9 +104,14 @@
                                         <materialDesign:Card Margin="4 4 0 0" Background="{DynamicResource PrimaryHueDarkBrush}"
                   Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                   Padding="8" UniformCornerRadius="6">
+                                            <TextBlock Text="{Binding Date,Converter={StaticResource DateToDayConverter}}"></TextBlock>
+                                        </materialDesign:Card>
+                                        <materialDesign:Card Margin="4 4 0 0" Background="Blue"
+                  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                  Padding="8" UniformCornerRadius="6">
                                             <TextBlock Text="{Binding BasicTempreture.TempMax}"></TextBlock>
                                         </materialDesign:Card>
-                                        <materialDesign:Card Margin="4 4 0 0" Background="{DynamicResource PrimaryHueDarkBrush}"
+                                        <materialDesign:Card Margin="4 4 0 0" Background="Red"
                   Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                   Padding="8" UniformCornerRadius="6">
                                             <TextBlock Text="{Binding BasicTempreture.TempMin}"></TextBlock>

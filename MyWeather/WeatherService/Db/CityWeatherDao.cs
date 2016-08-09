@@ -19,7 +19,10 @@ namespace DevangsWeather.Service.Db
 
                 var existingRecords = cityWeatherCollection.Find(x => x.City.CityName.Equals(cityWeather.City.CityName));
 
-                if (existingRecords.Count() > 7)
+                if (existingRecords.Count() > 7 && (existingRecords.Count() > 0 && 
+                    cityWeather.CurrentWeather.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString()))
+                    || (existingRecords.Count() > 0 
+                    && cityWeather.CurrentWeather.Date.ToShortDateString() == cityWeather.CurrentWeather.Date.ToShortDateString()))
                 {
                     var recordTOUpdate = existingRecords.OrderByDescending(x => x.CurrentWeather.Date).FirstOrDefault();
                     recordTOUpdate.CurrentWeather = cityWeather.CurrentWeather;
@@ -74,8 +77,8 @@ namespace DevangsWeather.Service.Db
             {
                 // Get  collection
                 var cityWeatherCollection = db.GetCollection<CityWeather>("cityweather");
-                return cityWeatherCollection.Find(x => x.City.CityName.Equals(cityName)).
-                    OrderByDescending(x=>x.CurrentWeather.Date).FirstOrDefault();
+                return cityWeatherCollection.FindAll().Where(x => x.City.CityName == cityName).
+                       OrderByDescending(x => x.CurrentWeather.Date).FirstOrDefault();
                 ///TODO:Add check to replace older than 7 day.
             }
         }

@@ -21,7 +21,7 @@ namespace DevangsWeather.Service.WeatherProviderAdapters
             destination.Description = source.Weather.Count > 0 ? source.Weather[0].Description : "";
             destination.Message = source.Weather.Count > 0 ? evaluateMessage(source.Weather[0].Main):"";
             destination.Date = Helper.ConverterUtils.ConvertUnixTimeStampToDateTime(source.Dt);
-            //destination.Icon = ConvertToMyicon(source.Weather.Count > 0 ? source.Weather[0].Icon : "unknown");
+            destination.Icon = ConvertToMyicon(source.Weather.Count > 0 ? source.Weather[0].Icon : "unknown");
             return destination;
         }        
     }

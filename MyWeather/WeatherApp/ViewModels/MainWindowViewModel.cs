@@ -20,7 +20,7 @@ namespace DevangsWeather.App.ViewModels
         private readonly DelegateCommand<object> goHomeCommand;
         private readonly DelegateCommand<object> doubleClickCommand;
         private readonly IRegionManager regionManager = null;
-        private static bool hide = false;
+        private static bool hide = true;
 
         public MainWindowViewModel(IRegionManager regionManager)
         {

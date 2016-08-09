@@ -45,3 +45,20 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+/MyWeather/packages
+/MyWeather/WeatherApp/bin/Debug
+/MyWeather/WeatherApp/obj/Debug
+/MyWeather/WeatherCommonInfra/obj/Debug
+/MyWeather/WeatherDetails/bin/Debug
+/MyWeather/WeatherDetails/obj/Debug
+/MyWeather/WeatherFindCity/bin/Debug
+/MyWeather/WeatherFindCity/obj/Debug
+/MyWeather/WeatherHome/obj/Debug
+/MyWeather/WeatherHome/bin/Debug
+/MyWeather/WeatherProviders/bin/Debug
+/MyWeather/WeatherService/bin/Debug
+/MyWeather/WeatherServiceTest/bin/Debug
+/MyWeather/WeatherServiceTest/obj/Debug
+/MyWeather/WeatherService/obj/Debug
+/MyWeather/WeatherProviders/obj/Debug
+/MyWeather/WeatherModel/obj/Debug
