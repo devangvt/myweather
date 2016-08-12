@@ -33,7 +33,7 @@
         </materialDesign:Card>
         <StackPanel Grid.Row="1" Orientation="Vertical">
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Visibility="{Binding CityListVisibility, Converter={StaticResource BoolToVisibilityConverter}}">Please use the '+' button to add cities</TextBlock>
-        <ListView  Background="{DynamicResource MaterialDesignPaper}"  BorderThickness="0" ItemsSource="{Binding CityCollection}" HorizontalContentAlignment="Stretch">
+        <ListView  Background="{DynamicResource MaterialDesignPaper}" ScrollViewer.VerticalScrollBarVisibility="Auto" MaxHeight="700" BorderThickness="0" ItemsSource="{Binding CityCollection}" HorizontalContentAlignment="Stretch">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Focusable" Value="false"/>

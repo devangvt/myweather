@@ -10,7 +10,7 @@ namespace DevangsWeather.WeatherServiceTest
     public class DbTester
     {
         [TestMethod]
-        public void TestMethod1()
+        public void AddCityToDB()
         {
            City c = new City { CityName = "Blr" };
             City c2 = new City { CityName = "Blr2" };
@@ -19,7 +19,7 @@ namespace DevangsWeather.WeatherServiceTest
         }
 
         [TestMethod]
-        public void TestMethod2()
+        public void AddMultipleCitiesToDB()
         {
             IEnumerable<City> list =  new CityDao().GetCities();
             foreach (City ci in list)
