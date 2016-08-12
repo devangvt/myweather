@@ -3,13 +3,16 @@ using System.Threading.Tasks;
 using DevangsWeather.Providers.wwo.Contracts;
 using System.Net.Http;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace DevangsWeather.Providers.wwo
 {
     public class WWOClient : IWWOClient
     {
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private string apiKey = null;
         private readonly string baseUrl = "http://api.worldweatheronline.com/premium/v1";
+
         public async Task<WWOSearchResponse>  FindCityAsync(string city)
         {
             if (string.IsNullOrWhiteSpace(city))
@@ -78,6 +81,7 @@ namespace DevangsWeather.Providers.wwo
 
         private static async Task<WWOSearchResponse> InvokeSearchAsync(string url)
         {
+            Log.Debug("Calling url" + url);
             var message = await new HttpClient().GetAsync(url).ConfigureAwait(false);
             try
             {
@@ -85,18 +89,33 @@ namespace DevangsWeather.Providers.wwo
             }
             catch (Exception e)
             {
-                ///TODO::LogError
+                Log.Error("Failed to connect to WWO website, switch to caching",e);
                 throw;
             }
+            
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.MissingMemberHandling = MissingMemberHandling.Ignore;
             settings.NullValueHandling = NullValueHandling.Ignore;
-            
-            return JsonConvert.DeserializeObject<WWOSearchResponse>(await message.Content.ReadAsStringAsync().ConfigureAwait(false),settings);
+
+            String responseString = null;
+            WWOSearchResponse response = null;
+            try
+            {
+                responseString = await message.Content.ReadAsStringAsync().ConfigureAwait(false);
+                Log.Debug("Response from  url" + url + "is " + responseString);
+                response = JsonConvert.DeserializeObject<WWOSearchResponse>(responseString, settings);
+            }
+            catch(Exception ex)
+            {
+                Log.Error("Unable to deserilze the response " + responseString, ex);
+                throw;
+            }
+            return response;
         }
 
         private static async Task<WWOWeatherResponse> GetWeatherAsync(string url)
         {
+            Log.Debug("Calling url" + url);
             var message = await new HttpClient().GetAsync(url).ConfigureAwait(false);
             try
             {
@@ -104,14 +123,28 @@ namespace DevangsWeather.Providers.wwo
             }
             catch (Exception e)
             {
-                ///TODO::LogError
+                Log.Error("Failed to connect to WWO website, switch to caching", e);
                 throw;
             }
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.MissingMemberHandling = MissingMemberHandling.Ignore;
             settings.NullValueHandling = NullValueHandling.Ignore;
 
-            return JsonConvert.DeserializeObject<WWOWeatherResponse>(await message.Content.ReadAsStringAsync().ConfigureAwait(false), settings);
+            WWOWeatherResponse response = null;
+            string responseString = null;
+            try
+            {
+                responseString =  await message.Content.ReadAsStringAsync().ConfigureAwait(false);
+                Log.Debug("Response from  url" + url + "is " + responseString);
+                response =JsonConvert.DeserializeObject<WWOWeatherResponse>(responseString, settings);
+                
+            }
+            catch(Exception ex)
+            {
+                Log.Error("Unable to deserilze the response " + responseString,ex);
+                throw;
+            }
+            return response;
         }
 
 

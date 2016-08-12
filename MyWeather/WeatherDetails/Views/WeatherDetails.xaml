@@ -91,7 +91,7 @@
 
                     </Grid>
                 </TabItem>
-                <TabItem   IsSelected="True">
+                <TabItem IsSelected="True">
                     <TabItem.Header>
 
                         <StackPanel Orientation="Horizontal">
@@ -184,8 +184,10 @@
                                                 <Image Height="80" ToolTip="{Binding weatherDesc}" Source="{Binding icon, Converter={StaticResource IconToSourceConverter}}"/>
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                     <TextBlock Text="{Binding maxtempC}"></TextBlock>
+                                                    <TextBlock Text="°C"></TextBlock>
                                                     <TextBlock Text="  "></TextBlock>
                                                     <TextBlock Text="{Binding mintempC}"></TextBlock>
+                                                    <TextBlock Text="°C"></TextBlock>
                                                 </StackPanel>
                                             </StackPanel>
                                         </materialDesign:Card>

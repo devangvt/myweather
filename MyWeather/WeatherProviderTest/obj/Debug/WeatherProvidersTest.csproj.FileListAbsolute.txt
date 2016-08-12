@@ -8,3 +8,5 @@ C:\code\myweather\MyWeather\WeatherProviderTest\bin\Debug\WeatherProviders.pdb
 C:\code\myweather\MyWeather\WeatherProviderTest\bin\Debug\Newtonsoft.Json.xml
 C:\code\myweather\MyWeather\WeatherProviderTest\obj\Debug\WeatherProvidersTest.dll
 C:\code\myweather\MyWeather\WeatherProviderTest\obj\Debug\WeatherProvidersTest.pdb
+C:\code\myweather\MyWeather\WeatherProviderTest\bin\Debug\log4net.dll
+C:\code\myweather\MyWeather\WeatherProviderTest\bin\Debug\log4net.xml

@@ -4,6 +4,7 @@ using DevangsWeather.Service;
 using DevangsWeather.WeatherProviderAdapters;
 using LiveCharts;
 using LiveCharts.Wpf;
+using log4net;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Interactivity.InteractionRequest;
@@ -20,19 +21,19 @@ namespace DevangsWeather.Details.ViewModels
         private readonly IRegionManager regionManager = null;
         private readonly IUnityContainer unityContainer = null;
         private IRegionNavigationService navigationService;
-        private readonly InteractionRequest<Confirmation> confirmExitInteractionRequest;
-        private string sendState = "Normal";
-
-        public DelegateCommand<object> GoBackCommand { get; private set; }
+        private readonly IWeatherService service = null;
+        //public DelegateCommand<object> GoBackCommand { get; private set; }
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public WeatherDetailsViewModel(IRegionManager regionManager, IUnityContainer container)
         {
+            Log.Debug("Start init WeatherDetailsViewModel");
             this.regionManager = regionManager;
             this.unityContainer = container;
-
+            service = container.Resolve<IWeatherService>();
             SeriesCollection = new SeriesCollection
             {
-                
+
 
             };
 
@@ -42,35 +43,27 @@ namespace DevangsWeather.Details.ViewModels
 
             };
 
-            Labels = new[] {"" };
+            Labels = new[] { "" };
             HistoricLabels = new[] { "" };
 
-
+            Log.Debug("End init WeatherDetailsViewModel");
         }
-    public SeriesCollection SeriesCollection { get; set; }
-    public string[] Labels { get; set; }
-        
 
-
+        //Series collection for Forecast
+        public SeriesCollection SeriesCollection { get; set; }
+        //Label for Forecast
+        public string[] Labels { get; set; }
+        // Y axis formatter
         public Func<double, string> YFormatter { get; set; }
 
-
+        //Series collection for History
         public SeriesCollection HistoricCollection { get; set; }
-        public string[]  HistoricLabels { get; set; }
+        //Label for History
+        public string[] HistoricLabels { get; set; }
 
-    public void ConfirmNavigationRequest(NavigationContext navigationContext, Action<bool> continuationCallback)
+        public void ConfirmNavigationRequest(NavigationContext navigationContext, Action<bool> continuationCallback)
         {
-            //if (this.sendState == "Normal")
-            //{
-            //    this.confirmExitInteractionRequest.Raise(
-            //        new Confirmation { Content = "", Title = "" },
-            //        c => { continuationCallback(c.Confirmed); });
-            //}
-            //else
-            //{
-
-                continuationCallback(true);
-            //}
+            continuationCallback(true);
         }
 
         private CurrentWeather currentWeather = null;
@@ -97,60 +90,78 @@ namespace DevangsWeather.Details.ViewModels
 
         private void PopulateForceastGraphData(WeatherForcast forecast)
         {
-            ChartValues<float> minPlot = new ChartValues<float>();
-            ChartValues<float> maxPlot = new ChartValues<float>();
-            List<String> dates = new List<string>();
-            foreach (WeatherTemplate w in forecast.Forecast)
+            Log.Debug("Start Populating Graph for Forecast");
+            try
             {
-                minPlot.Add(float.Parse(w.mintempC));
-                maxPlot.Add(float.Parse(w.maxtempC));
-                dates.Add(w.date);
+                ChartValues<float> minPlot = new ChartValues<float>();
+                ChartValues<float> maxPlot = new ChartValues<float>();
+                List<String> dates = new List<string>();
+                foreach (WeatherTemplate w in forecast.Forecast)
+                {
+                    minPlot.Add(float.Parse(w.mintempC));
+                    maxPlot.Add(float.Parse(w.maxtempC));
+                    dates.Add(w.date);
+                }
+
+                SeriesCollection.Clear();
+
+                SeriesCollection.Add(new LineSeries
+                {
+                    Title = "Min Tempreture",
+                    Values = minPlot
+                });
+
+                SeriesCollection.Add(new LineSeries
+                {
+                    Title = "Max Tempreture",
+                    Values = maxPlot
+                });
+
+                Labels = dates.ToArray();
+                Log.Debug("End Populating Graph for Forecast");
             }
-
-            SeriesCollection.Clear();
-
-            SeriesCollection.Add(new LineSeries
+            catch (Exception ex)
             {
-                Title = "Min Tempreture",
-                Values = minPlot
-            });
-
-            SeriesCollection.Add(new LineSeries
-            {
-                Title = "Max Tempreture",
-                Values = maxPlot
-            });
-
-            Labels = dates.ToArray();
+                Log.Error("Unable to populate forecast graph data", ex);
+            }
         }
 
         private void PopulateHistoryGraphData()
         {
-            ChartValues<float> minPlot = new ChartValues<float>();
-            ChartValues<float> maxPlot = new ChartValues<float>();
-            List<String> dates = new List<string>();
-            foreach (WeatherTemplate w in WeatherHistory)
+            try
             {
-                minPlot.Add(float.Parse(w.mintempC));
-                maxPlot.Add(float.Parse(w.maxtempC));
-                dates.Add(w.date);
+                Log.Debug("Start Populating Graph for History");
+                ChartValues<float> minPlot = new ChartValues<float>();
+                ChartValues<float> maxPlot = new ChartValues<float>();
+                List<String> dates = new List<string>();
+                foreach (WeatherTemplate w in WeatherHistory)
+                {
+                    minPlot.Add(float.Parse(w.mintempC));
+                    maxPlot.Add(float.Parse(w.maxtempC));
+                    dates.Add(w.date);
+                }
+
+                HistoricCollection.Clear();
+
+                HistoricCollection.Add(new LineSeries
+                {
+                    Title = "Min Tempreture",
+                    Values = minPlot
+                });
+
+                HistoricCollection.Add(new LineSeries
+                {
+                    Title = "Max Tempreture",
+                    Values = maxPlot
+                });
+
+                HistoricLabels = dates.ToArray();
+                Log.Debug("End Populating Graph for History");
             }
-
-            HistoricCollection.Clear();
-
-            HistoricCollection.Add(new LineSeries
+            catch(Exception ex)
             {
-                Title = "Min Tempreture",
-                Values = minPlot
-            });
-
-            HistoricCollection.Add(new LineSeries
-            {
-                Title = "Max Tempreture",
-                Values = maxPlot
-            });
-
-            HistoricLabels = dates.ToArray();
+                Log.Error("Unable to populate History graph data", ex);
+            }
         }
 
         private ObservableCollection<WeatherTemplate> weatherHistory = new ObservableCollection<WeatherTemplate>();
@@ -167,71 +178,101 @@ namespace DevangsWeather.Details.ViewModels
 
         public void Initialize()
         {
-            this.regionManager.RegisterViewWithRegion("MainContentRegion", typeof(DevangsWeather.Details.Views.WeatherDetails));
+            this.regionManager.RegisterViewWithRegion("MainContentRegion", typeof(Views.WeatherDetails));
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
             return true;
-           // throw new NotImplementedException();
+
         }
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            //throw new NotImplementedException();
+            //Do nothing
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            Log.Debug("NavigatedTo called for WeatherDetailsViewModel");
+                
             navigationService = navigationContext.NavigationService;
             var result = navigationContext.Parameters["City"];
-
+            Log.Debug("Navigation Parameters " + result.ToString());
             //Load data.
-            
+            Log.Debug("Start Loading Weather");
             LoadCityWeather(result.ToString());
             LoadCityForecast(result.ToString());
             LoadCityHistoric(result.ToString());
+            Log.Debug("End Loading Weather");
         }
 
         private async void LoadCityHistoric(string cityName)
         {
+            try
+            {
+                IsLoadingHistory = true;
+                WeatherHistoric w = await service.GetWeatherForLastWeek(cityName);
 
-            IWWOClient client = new WWOClient(unityContainer.Resolve<String>("apiKey"));
-            IWeatherProviderAdapter adapter = new WWOAdapter(client);
-            IWeatherService service = new WeatherService(adapter);
-            WeatherHistoric w = await service.GetWeatherForLastWeek(cityName);
-            
-            WeatherHistory = new ObservableCollection<WeatherTemplate>(w.Historic);
+                WeatherHistory = new ObservableCollection<WeatherTemplate>(w.Historic);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed to load historic weather",ex);
+            }
+            finally
+            {
+                IsLoadingHistory = false;
+            }
         }
 
         private async void LoadCityForecast(string cityName)
         {
-            IWWOClient client = new WWOClient(unityContainer.Resolve<String>("apiKey"));
-            IWeatherProviderAdapter adapter = new WWOAdapter(client);
-            IWeatherService service = new WeatherService(adapter);
-           WeatherForcast forecast = await service.GetWeatherForNextWeek(cityName);
-            ForecastWeather = forecast;
+            try
+            {
+                IsLoadingForecast = true;
+                WeatherForcast forecast = await service.GetWeatherForNextWeek(cityName);
+                ForecastWeather = forecast;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed Loading Forecast Weather", ex);
+            }
+            finally
+            {
+                IsLoadingForecast = false;
+            }
         }
 
         private async void LoadCityWeather(string cityName)
         {
-            IWWOClient client = new WWOClient(unityContainer.Resolve<String>("apiKey"));
-            IWeatherProviderAdapter adapter = new WWOAdapter(client);
-            IWeatherService service = new WeatherService(adapter);
-            DevangsWeather.Model.CurrentWeather weather = null;
-            IsLoading = true;
-            weather = await service.GetCurrentWeather(cityName);
-            CurrentWeather = weather;
-            CurrentCity = weather.CityName;
-            IsLoading = false;
+            try
+            {
+                CurrentWeather weather = null;
+                IsLoading = true;
+                weather = await service.GetCurrentWeather(cityName);
+                CurrentWeather = weather;
+                CurrentCity = weather.CityName;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed Loading Current Weather",ex);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         private string currentCity = null;
         public string CurrentCity
         {
             get { return currentCity; }
-            set {  currentCity =value;
-                OnPropertyChanged(() => CurrentCity); }
+            set
+            {
+                currentCity = value;
+                OnPropertyChanged(() => CurrentCity);
+            }
         }
 
         private bool isLoading = false;
@@ -245,6 +286,34 @@ namespace DevangsWeather.Details.ViewModels
             {
                 isLoading = value;
                 OnPropertyChanged(() => IsLoading);
+            }
+        }
+
+        private bool isLoadingHistory = false;
+        public bool IsLoadingHistory
+        {
+            get
+            {
+                return isLoadingHistory;
+            }
+            set
+            {
+                isLoadingHistory = value;
+                OnPropertyChanged(() => IsLoadingHistory);
+            }
+        }
+
+        private bool isLoadingForecast = false;
+        public bool IsLoadingForecast
+        {
+            get
+            {
+                return isLoadingForecast;
+            }
+            set
+            {
+                isLoadingForecast = value;
+                OnPropertyChanged(() => IsLoadingForecast);
             }
         }
 

@@ -14,8 +14,8 @@ namespace DevangsWeather.WeatherServiceTest
         {
            City c = new City { CityName = "Blr" };
             City c2 = new City { CityName = "Blr2" };
-            new CityDao().AddCity(c);
-            new CityDao().AddCity(c2);
+             CityDao.AddCity(c);
+             CityDao.AddCity(c2);
         }
 
         [TestMethod]

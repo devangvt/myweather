@@ -2,6 +2,7 @@
 using DevangsWeather.Providers.wwo;
 using DevangsWeather.Service;
 using DevangsWeather.WeatherProviderAdapters;
+using log4net;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace DevangsWeather.Home.ViewModels
@@ -20,27 +22,52 @@ namespace DevangsWeather.Home.ViewModels
         private readonly DelegateCommand<object> removeCityCommand;
         private readonly IRegionManager regionManager = null;
         private readonly IUnityContainer container = null;
+        private readonly IWeatherService service = null;
 
-
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public WeatherHomeViewModel(IRegionManager regionManager,IUnityContainer container)
         {
+            Log.Debug("Start init WeatherHomeViewModel");
             this.container = container;
             this.regionManager = regionManager;
+            service = this.container.Resolve<IWeatherService>();
             this.showDetailsCommand = new DelegateCommand<object>(ShowDetails, CanShowDetails);
             this.removeCityCommand = new DelegateCommand<object>(RemoveCity);
+            Log.Debug("Calling Populate Cities");
             Task.Run(()=> PopulateCities());
+            Log.Debug("End init WeatherHomeViewModel");
         }
 
         private void PopulateCities()
         {
-            IsLoading = true;
-            IWWOClient client = new WWOClient(container.Resolve<String>("apiKey"));
-            IWeatherProviderAdapter adapter = new WWOAdapter(client);
-            IWeatherService service = new WeatherService(adapter);
-            IList<CurrentWeather> weather = Task.Run(() => service.FindAllCityCurrentWeather()).GetAwaiter().GetResult();
-            CityCollection = new ObservableCollection<CurrentWeather>(weather);
-            IsLoading = false;
+            try
+            {
+                IsLoading = true;
+                IList<CurrentWeather> weather = Task.Run(() => service.FindAllCityCurrentWeather()).GetAwaiter().GetResult();
+                CityCollection = new ObservableCollection<CurrentWeather>(weather);
+                CityListVisibility = CityCollection.Count < 1;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unable to load cities", ex);
+                MessageBox.Show("Unable to load cities");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private bool cityListVisibility = false;
+        public bool CityListVisibility
+        {
+            get { return cityListVisibility; }
+            set
+            {
+                cityListVisibility = value;
+                OnPropertyChanged(() => CityListVisibility);
+            }
         }
 
 
@@ -73,10 +100,15 @@ namespace DevangsWeather.Home.ViewModels
 
         private void RemoveCity(object data)
         {
-            IWWOClient client = new WWOClient(container.Resolve<String>("apiKey"));
-            IWeatherProviderAdapter adapter = new WWOAdapter(client);
-            IWeatherService service = new WeatherService(adapter);
-            Task.Run(() => service.RemoveCity(((CurrentWeather)data).CityName)).ContinueWith((x)=> { PopulateCities(); });
+            try
+            {
+                Task.Run(() => service.RemoveCity(((CurrentWeather)data).CityName)).ContinueWith((x) => { PopulateCities(); });
+            }
+            catch(Exception ex)
+            {
+                Log.Error("Unable to remove the city", ex);
+                MessageBox.Show("Unable to remove city");
+            }
         }
 
         private bool CanShowDetails(object ignored)
@@ -91,7 +123,15 @@ namespace DevangsWeather.Home.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            PopulateCities();
+            try
+            {
+                Task.Run(() => PopulateCities());
+            }
+            catch(Exception ex)
+            {
+                Log.Error("Failed to populate cities", ex);
+                MessageBox.Show("Unable to populate cities");
+            }
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
@@ -101,7 +141,7 @@ namespace DevangsWeather.Home.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-           // throw new NotImplementedException();
+           // Not implemented intentionally
         }
 
         public ICommand ShowDetailsCommand

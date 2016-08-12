@@ -19,6 +19,5 @@
         public string Message { get; set; }
         public string SmileIcon { get; set; }
 
-
     }
 }

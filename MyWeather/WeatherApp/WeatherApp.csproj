@@ -179,6 +179,14 @@
       <Project>{B84CBD07-FA21-48AF-95E1-4227ABA17CC2}</Project>
       <Name>WeatherModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WeatherProviders\WeatherProviders.csproj">
+      <Project>{405C4DF1-C1EC-4732-A863-B77E3CDECB16}</Project>
+      <Name>WeatherProviders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WeatherService\WeatherService.csproj">
+      <Project>{E7A4AEB6-A05A-476A-8ED0-767CEB76A300}</Project>
+      <Name>WeatherService</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\weather.ico" />

@@ -8,13 +8,12 @@ namespace DevangsWeather.Service.Db
 {
     public class CityDao
     {
-        private object locker = new object();
-        public void AddCity(City city)
+        //private object locker = new object();
+        public static void AddCity(City city)
         {
-            lock (locker)
+            using (var db = new LiteDatabase(@"WeatherData.db"))
             {
-                using (var db = new LiteDatabase(@"WeatherData.db"))
-                {
+                
                     // Get customer collection
                     var cities = db.GetCollection<City>("city");
 
@@ -30,8 +29,9 @@ namespace DevangsWeather.Service.Db
 
                         cities.Insert(city);
                     }
-                }
+                
             }
+            
         }
 
         public  City GetCity(String cityName)

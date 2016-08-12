@@ -22,7 +22,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <materialDesign:Card  Grid.Row="0" UniformCornerRadius="14" Padding="4"
+        
+        <materialDesign:Card  Grid.Row="0" UniformCornerRadius="14" Padding="4" 
                        Visibility="{Binding IsLoading,Converter={StaticResource BoolToVisibilityConverter }}"
                       VerticalAlignment="Center" HorizontalAlignment="Center" Margin="12 12 12 12">
             <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" 
@@ -30,7 +31,9 @@
                          IsIndeterminate="True"                         
                       />
         </materialDesign:Card>
-        <ListView Grid.Row="1" Background="{DynamicResource MaterialDesignPaper}"  BorderThickness="0" ItemsSource="{Binding CityCollection}" HorizontalContentAlignment="Stretch">
+        <StackPanel Grid.Row="1" Orientation="Vertical">
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Visibility="{Binding CityListVisibility, Converter={StaticResource BoolToVisibilityConverter}}">Please use the '+' button to add cities</TextBlock>
+        <ListView  Background="{DynamicResource MaterialDesignPaper}"  BorderThickness="0" ItemsSource="{Binding CityCollection}" HorizontalContentAlignment="Stretch">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Focusable" Value="false"/>
@@ -82,6 +85,7 @@
             </DataTemplate>
         </ListView.ItemTemplate>
              
-    </ListView>
+            </ListView>
+       </StackPanel>
     </Grid>
 </UserControl>

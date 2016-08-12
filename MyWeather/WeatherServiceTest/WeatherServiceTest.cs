@@ -44,9 +44,11 @@ namespace WeatherServiceTest
             var weatherService = new WeatherService(adapter);
            City m = Task.Run(()=> weatherService.GetCityByName("Mumbai")).GetAwaiter().GetResult();
             Assert.AreEqual(m.CityName, "Mumbai");
+            Task.Run(() => weatherService.GetCurrentWeather("Mumbai")).GetAwaiter().GetResult();
 
             City c = Task.Run(() => weatherService.GetCityByName("Bangalore")).GetAwaiter().GetResult();
             Assert.AreEqual(c.CityName, "Bangalore City");
+            Task.Run(() => weatherService.GetCurrentWeather("Bangalore City")).GetAwaiter().GetResult();
             City x = Task.Run(() => weatherService.GetCityByName("Delhi")).GetAwaiter().GetResult();
             Assert.AreEqual(x.CityName, "Delhi Sabzimandi");
         }

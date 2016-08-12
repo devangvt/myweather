@@ -10,10 +10,10 @@ namespace DevangsWeather.Service.Db
         {
             using (var db = new LiteDatabase(@"WeatherData.db"))
             {
-                // Get customer collection
+                // Get Cityforcast collection
                 var cityForecastCollection = db.GetCollection<WeatherForcast>("cityforecast");
 
-                // Insert new customer document (Id will be auto-incremented)
+                // Insert new cityforecast document (Id will be auto-incremented)
                 cityForecastCollection.Insert(forecast);
 
                 var existingRecords = cityForecastCollection.Find(x => x.CityId.Equals(forecast.CityId));
