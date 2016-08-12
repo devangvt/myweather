@@ -1,9 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DevangsWeather.Providers.wwo;
-using System.Threading.Tasks;
 using DevangsWeather.Providers.wwo.Contracts;
+using System.Threading.Tasks;
 
-namespace DevangsWeather.WeatherServiceTest
+namespace WeatherProvidersTest
 {
     [TestClass]
     public class WWOClientTest
@@ -13,7 +14,7 @@ namespace DevangsWeather.WeatherServiceTest
         {
 
             IWWOClient c = new WWOClient("344f392b864143fd805153356161008");
-            WWOSearchResponse result =  Task.Run(()=> c.FindCityAsync("Bangalore")).GetAwaiter().GetResult();
+            WWOSearchResponse result = Task.Run(() => c.FindCityAsync("Bangalore")).GetAwaiter().GetResult();
         }
 
         [TestMethod]
@@ -37,7 +38,8 @@ namespace DevangsWeather.WeatherServiceTest
         {
 
             IWWOClient c = new WWOClient("344f392b864143fd805153356161008");
-            WWOWeatherResponse result = Task.Run(() => c.GetHistoricWeather("Bangalore City","2016-08-2","2016-08-08")).GetAwaiter().GetResult();
+            WWOWeatherResponse result = Task.Run(() => c.GetHistoricWeather("Bangalore City", "2016-08-2", "2016-08-08")).GetAwaiter().GetResult();
         }
     }
+
 }

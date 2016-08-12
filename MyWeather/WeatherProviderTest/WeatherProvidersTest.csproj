@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{106A6BB0-9BC1-4C0B-82FC-843B884255DC}</ProjectGuid>
+    <ProjectGuid>{370A65B0-6827-41F9-A71A-195B9E102759}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DevangsWeather.WeatherServiceTest</RootNamespace>
-    <AssemblyName>WeatherServiceTest</AssemblyName>
+    <RootNamespace>WeatherProvidersTest</RootNamespace>
+    <AssemblyName>WeatherProvidersTest</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,16 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FakeItEasy, Version=2.2.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
-      <HintPath>..\packages\FakeItEasy.2.2.0\lib\net40\FakeItEasy.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -54,33 +45,18 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-          <Private>False</Private>
-        </Reference>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="DbTester.cs" />
-    <Compile Include="WeatherServiceTest.cs" />
+    <Compile Include="WWOClientTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WeatherModel\WeatherModel.csproj">
-      <Project>{b84cbd07-fa21-48af-95e1-4227aba17cc2}</Project>
-      <Name>WeatherModel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WeatherProviders\WeatherProviders.csproj">
       <Project>{405c4df1-c1ec-4732-a863-b77e3cdecb16}</Project>
       <Name>WeatherProviders</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WeatherService\WeatherService.csproj">
-      <Project>{e7a4aeb6-a05a-476a-8ed0-767ceb76a300}</Project>
-      <Name>WeatherService</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

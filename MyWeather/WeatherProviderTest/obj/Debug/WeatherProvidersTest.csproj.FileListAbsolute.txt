@@ -1,0 +1,10 @@
+C:\code\myweather\MyWeather\WeatherProviderTest\obj\Debug\WeatherProvidersTest.csprojResolveAssemblyReference.cache
+C:\code\myweather\MyWeather\WeatherProviderTest\bin\Debug\WeatherProvidersTest.dll
+C:\code\myweather\MyWeather\WeatherProviderTest\bin\Debug\WeatherProvidersTest.pdb
+C:\code\myweather\MyWeather\WeatherProviderTest\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\code\myweather\MyWeather\WeatherProviderTest\bin\Debug\WeatherProviders.dll
+C:\code\myweather\MyWeather\WeatherProviderTest\bin\Debug\Newtonsoft.Json.dll
+C:\code\myweather\MyWeather\WeatherProviderTest\bin\Debug\WeatherProviders.pdb
+C:\code\myweather\MyWeather\WeatherProviderTest\bin\Debug\Newtonsoft.Json.xml
+C:\code\myweather\MyWeather\WeatherProviderTest\obj\Debug\WeatherProvidersTest.dll
+C:\code\myweather\MyWeather\WeatherProviderTest\obj\Debug\WeatherProvidersTest.pdb

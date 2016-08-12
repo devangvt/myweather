@@ -62,7 +62,6 @@
     <Compile Include="Service\WeatherService.cs" />
     <Compile Include="WeatherProviderAdapters\IWeatherProviderAdapter.cs" />
     <Compile Include="WeatherProviderAdapters\Resolvers\BaseResolver.cs" />
-    <Compile Include="WeatherProviderAdapters\IWeatherProviderAdapter_old.cs" />
     <Compile Include="WeatherProviderAdapters\Resolvers\WWOWeatherResponseToWeatherHistoric.cs" />
     <Compile Include="WeatherProviderAdapters\Resolvers\WWOWeatherResponseToWeatherForecast.cs" />
     <Compile Include="WeatherProviderAdapters\Resolvers\WWOCurrentWeatherResponseToWeather.cs" />
