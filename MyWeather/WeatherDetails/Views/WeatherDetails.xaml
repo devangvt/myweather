@@ -11,20 +11,18 @@
              xmlns:local="clr-namespace:DevangsWeather.Details.Views"
              mc:Ignorable="d"              
              d:DesignHeight="300" d:DesignWidth="700"
+             xmlns:views="clr-namespace:DevangsWeather.Details.Views"
              prism:ViewModelLocator.AutoWireViewModel="True">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Green.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
-
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
             <commonInfra:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <commonInfra:DateToDayConverter x:Key="DateToDayConverter"/>
+            <commonInfra:IconToSourceConverter x:Key="IconToSourceConverter" />
+            <commonInfra:DateToTextConverter x:Key="DateToTextConverter" />
+            <commonInfra:SmileIconToSourceConverter x:Key="SmileIconToSourceConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -43,56 +41,17 @@
                             <TextBlock FontSize="20" Width="200" TextAlignment="Center">Historic</TextBlock>
                         </StackPanel>
                     </TabItem.Header>
-                    <ListView ItemsSource="{Binding WeatherHistory}" Background="{DynamicResource MaterialDesignPaper}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding CurrentWeather.BasicTempreture.TempMin}"></TextBlock>
-                                    <TextBlock Text="{Binding CurrentWeather.BasicTempreture.TempMan}"></TextBlock>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </TabItem>
-                <TabItem   IsSelected="True">
-                    <TabItem.Header>
-
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontSize="20" Width="200" TextAlignment="Center">Current</TextBlock>
-                        </StackPanel>
-                    </TabItem.Header>
-                    <StackPanel Orientation="Vertical" >
-                        <materialDesign:Card UniformCornerRadius="14" Padding="4"
-                       Visibility="{Binding IsLoading,Converter={StaticResource BoolToVisibilityConverter }}"
-                      VerticalAlignment="Center" HorizontalAlignment="Center" Margin="12 12 12 12">
-                            <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" 
-                         Value="50" Height="50" Width="50"
-                         IsIndeterminate="True"                         
-                      />
-                        </materialDesign:Card>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                            <TextBlock FontSize="30" Text="{Binding CurrentWeather.City.CityName}"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                            <TextBlock FontSize="20" Text="Current Tempreture"></TextBlock>
-                            <TextBlock FontSize="30" Text="{Binding CurrentWeather.CurrentWeather.BasicTempreture.Temp}"></TextBlock>
-                        </StackPanel>
-
-
-                    </StackPanel>
-                </TabItem>
-                <TabItem >
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontSize="20" Width="200" TextAlignment="Center">Forecast</TextBlock>
-                        </StackPanel>
-                    </TabItem.Header>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="130"/>
+                            <RowDefinition Height="150"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <ListView  Grid.Row="0" HorizontalAlignment="Center" Background="{DynamicResource MaterialDesignPaper}" ItemsSource="{Binding ForecastWeather.Forecast}">
+                        <ListView  Grid.Row="0" MinWidth="650" BorderThickness="0" HorizontalAlignment="Center" Background="{DynamicResource MaterialDesignPaper}" ItemsSource="{Binding WeatherHistory}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Focusable" Value="false"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal"></StackPanel>
@@ -104,17 +63,131 @@
                                         <materialDesign:Card Margin="4 4 0 0" Background="{DynamicResource PrimaryHueDarkBrush}"
                   Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                   Padding="8" UniformCornerRadius="6">
-                                            <TextBlock Text="{Binding Date,Converter={StaticResource DateToDayConverter}}"></TextBlock>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock TextAlignment="Center" Text="{Binding date}"></TextBlock>
+                                                <!--,Converter={StaticResource DateToDayConverter}-->
+                                                <Image Height="80" ToolTip="{Binding weatherDesc}" Source="{Binding icon, Converter={StaticResource IconToSourceConverter}}"/>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <TextBlock Text="{Binding maxtempC}"></TextBlock>
+                                                    <TextBlock Text="°C"></TextBlock>
+                                                    <TextBlock Text="  "></TextBlock>
+                                                    <TextBlock Text="{Binding mintempC}"></TextBlock>
+                                                    <TextBlock Text="°C"></TextBlock>
+                                                </StackPanel>
+                                            </StackPanel>
                                         </materialDesign:Card>
-                                        <materialDesign:Card Margin="4 4 0 0" Background="Blue"
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <lvc:CartesianChart Grid.Row="1" Series="{Binding HistoricCollection}"  LegendLocation="Right" >                            
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="Tempreture in Degrees" ></lvc:Axis>
+                            </lvc:CartesianChart.AxisY>
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Title="Days" Labels="{Binding HistoricLabels}"></lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+                        </lvc:CartesianChart>
+
+                    </Grid>
+                </TabItem>
+                <TabItem   IsSelected="True">
+                    <TabItem.Header>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontSize="20" Width="200" TextAlignment="Center">Current</TextBlock>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel Orientation="Vertical" >
+                        <materialDesign:Card  UniformCornerRadius="14" Padding="4"
+                       Visibility="{Binding IsLoading,Converter={StaticResource BoolToVisibilityConverter }}"
+                      VerticalAlignment="Center" HorizontalAlignment="Center" Margin="12 12 12 12">
+                            <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" 
+                         Value="50" Height="50" Width="50"
+                         IsIndeterminate="True"                         
+                      />
+                        </materialDesign:Card>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="200"/>
+                                <RowDefinition Height="100"/>
+                            </Grid.RowDefinitions>
+                            
+                            <materialDesign:Card Margin="5" Grid.Row="0" Grid.ColumnSpan="2" Background="{DynamicResource PrimaryHueDarkBrush}"
                   Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                   Padding="8" UniformCornerRadius="6">
-                                            <TextBlock Text="{Binding BasicTempreture.TempMax}"></TextBlock>
-                                        </materialDesign:Card>
-                                        <materialDesign:Card Margin="4 4 0 0" Background="Red"
+                                <StackPanel Orientation="Horizontal"   HorizontalAlignment="Center" Grid.Column="0">
+                                    <Image Height="150" Width="Auto" ToolTip="{Binding CurrentWeather.WeatherDesc}"   Source="{Binding CurrentWeather.Icon, Converter={StaticResource IconToSourceConverter}}"/>
+                                    <StackPanel Orientation="Vertical" >
+                                        <StackPanel Orientation="Horizontal" Margin="0 30 0 0">
+                                            <TextBlock  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"   VerticalAlignment="Center" FontSize="30" Text="  "></TextBlock>
+                                            <TextBlock  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" FontWeight="Bold" VerticalAlignment="Center" FontSize="30" Text="{Binding CurrentWeather.Temp_C}"></TextBlock>
+                                            <TextBlock  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" FontWeight="Bold" VerticalAlignment="Center" FontSize="30" Text=" °C"></TextBlock>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="10 0 0 0">
+                                            <TextBlock  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"  VerticalAlignment="Center" FontSize="15" Text="Last updated at "></TextBlock>
+                                            <TextBlock  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"  VerticalAlignment="Center" FontSize="15" Text="{Binding CurrentWeather.LocalObsTime}"></TextBlock>
+                                            
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="10 0 0 0">
+                                            <TextBlock  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"  VerticalAlignment="Center" FontSize="20" Text="Himidity "></TextBlock>
+                                            <TextBlock  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"  VerticalAlignment="Center" FontSize="20" Text="{Binding CurrentWeather.Humidity}"></TextBlock>
+                                            <TextBlock  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"  VerticalAlignment="Center" FontSize="20" Text=" %"></TextBlock>
+                                            
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="10 0 0 0">
+                                            <TextBlock  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"  VerticalAlignment="Center" FontSize="20" Text="Pressure "></TextBlock>
+                                            <TextBlock  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"  VerticalAlignment="Center" FontSize="20" Text="{Binding CurrentWeather.Pressure}"></TextBlock>
+                                            <TextBlock  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"  VerticalAlignment="Center" FontSize="20" Text=" mb"></TextBlock>                                            
+                                        </StackPanel>
+                                     </StackPanel>
+                                </StackPanel>
+                            </materialDesign:Card>
+                            <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                                <TextBlock  Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" FontSize="20" Text="{Binding CurrentWeather.Message}"></TextBlock>
+                                <Image Height="80"  Source="{Binding CurrentWeather.SmileIcon, Converter={StaticResource SmileIconToSourceConverter}}"/>
+                            </StackPanel>
+                        </Grid>                        
+                    </StackPanel>
+                </TabItem>
+                <TabItem >
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontSize="20" Width="200" TextAlignment="Center">Forecast</TextBlock>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="150"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ListView  Grid.Row="0" MinWidth="650" BorderThickness="0" HorizontalAlignment="Center" Background="{DynamicResource MaterialDesignPaper}" ItemsSource="{Binding ForecastWeather.Forecast}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Focusable" Value="false"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"></StackPanel>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical">
+                                        <materialDesign:Card Margin="4 4 0 0" Background="{DynamicResource PrimaryHueDarkBrush}"
                   Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                   Padding="8" UniformCornerRadius="6">
-                                            <TextBlock Text="{Binding BasicTempreture.TempMin}"></TextBlock>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock TextAlignment="Center" Text="{Binding date}"></TextBlock>
+                                                <!--,Converter={StaticResource DateToDayConverter}-->
+                                                <Image Height="80" ToolTip="{Binding weatherDesc}" Source="{Binding icon, Converter={StaticResource IconToSourceConverter}}"/>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <TextBlock Text="{Binding maxtempC}"></TextBlock>
+                                                    <TextBlock Text="  "></TextBlock>
+                                                    <TextBlock Text="{Binding mintempC}"></TextBlock>
+                                                </StackPanel>
+                                            </StackPanel>
                                         </materialDesign:Card>
                                     </StackPanel>
                                 </DataTemplate>

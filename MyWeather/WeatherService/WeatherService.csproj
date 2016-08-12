@@ -55,15 +55,24 @@
     <Compile Include="Db\CityDao.cs" />
     <Compile Include="Db\CityForcastDao.cs" />
     <Compile Include="Db\CityWeatherDao.cs" />
+    <Compile Include="Db\CurrentWeatherDao.cs" />
+    <Compile Include="Db\WeatherForcastDao.cs" />
+    <Compile Include="Db\WeatherHistoricDao.cs" />
     <Compile Include="Helper\ConverterUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\IWeatherService.cs" />
     <Compile Include="Service\WeatherService.cs" />
-    <Compile Include="WeatherProviderAdapters\Resolvers\BaseResolver.cs" />
     <Compile Include="WeatherProviderAdapters\IWeatherProviderAdapter.cs" />
+    <Compile Include="WeatherProviderAdapters\Resolvers\BaseResolver.cs" />
+    <Compile Include="WeatherProviderAdapters\IWeatherProviderAdapter_old.cs" />
     <Compile Include="WeatherProviderAdapters\Resolvers\OpenWeatherMapResponseToWeatherResolver.cs" />
     <Compile Include="WeatherProviderAdapters\OpenWeatherMapAdapter.cs" />
     <Compile Include="WeatherProviderAdapters\Resolvers\OWMForecastResponseToListResponseResolver.cs" />
+    <Compile Include="WeatherProviderAdapters\Resolvers\WWOWeatherResponseToWeatherHistoric.cs" />
+    <Compile Include="WeatherProviderAdapters\Resolvers\WWOWeatherResponseToWeatherForecast.cs" />
+    <Compile Include="WeatherProviderAdapters\Resolvers\WWOCurrentWeatherResponseToWeather.cs" />
+    <Compile Include="WeatherProviderAdapters\Resolvers\WWOSearcResponseToCityResolver.cs" />
+    <Compile Include="WeatherProviderAdapters\WWOAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WeatherModel\WeatherModel.csproj">

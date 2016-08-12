@@ -63,6 +63,21 @@
     <Compile Include="OpenWeatherMap\Settings\SearchAccuracy.cs" />
     <Compile Include="OpenWeatherMap\Settings\SupportedLanguage.cs" />
     <Compile Include="OpenWeatherMap\Settings\UnitsFormat.cs" />
+    <Compile Include="wwo\Contracts\AreaName.cs" />
+    <Compile Include="wwo\Contracts\Country.cs" />
+    <Compile Include="wwo\Contracts\CurrentCondition.cs" />
+    <Compile Include="wwo\Contracts\Data.cs" />
+    <Compile Include="wwo\Contracts\Hourly.cs" />
+    <Compile Include="wwo\Contracts\Region.cs" />
+    <Compile Include="wwo\Contracts\Request.cs" />
+    <Compile Include="wwo\Contracts\Result.cs" />
+    <Compile Include="wwo\Contracts\Search_Api.cs" />
+    <Compile Include="wwo\Contracts\Weather.cs" />
+    <Compile Include="wwo\Contracts\WeatherDesc.cs" />
+    <Compile Include="wwo\Contracts\WWOSearchResponse.cs" />
+    <Compile Include="wwo\Contracts\WWOWeatherResponse.cs" />
+    <Compile Include="wwo\IWWOClient.cs" />
+    <Compile Include="wwo\WWOClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -70,6 +85,7 @@
   <ItemGroup>
     <Content Include="ReadMe.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

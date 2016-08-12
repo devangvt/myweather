@@ -17,7 +17,7 @@ namespace DevangsWeather.CommonInfra
         object parameter,
         CultureInfo culture)
         {
-            String  displayDate = ((DateTime)value).DayOfWeek.ToString().Substring(0,3).ToUpper();
+            String  displayDate = ((DateTime)value).DayOfWeek.ToString().Substring(0,3);
             return displayDate;
         }
 

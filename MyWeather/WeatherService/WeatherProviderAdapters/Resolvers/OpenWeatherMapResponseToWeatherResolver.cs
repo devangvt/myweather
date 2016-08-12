@@ -19,7 +19,7 @@ namespace DevangsWeather.Service.WeatherProviderAdapters
             destination.BasicTempreture.Humidity = source.Main.Humidity;
             destination.Id = source.Weather.Count > 0 ? 0 : source.Weather[0].Id;
             destination.Description = source.Weather.Count > 0 ? source.Weather[0].Description : "";
-            destination.Message = source.Weather.Count > 0 ? evaluateMessage(source.Weather[0].Main):"";
+            //destination.Message = source.Weather.Count > 0 ? EvaluateMessage():"";
             destination.Date = Helper.ConverterUtils.ConvertUnixTimeStampToDateTime(source.Dt);
             destination.Icon = ConvertToMyicon(source.Weather.Count > 0 ? source.Weather[0].Icon : "unknown");
             return destination;

@@ -1,5 +1,6 @@
 ﻿using DevangsWeather.Model;
 using DevangsWeather.OpenWeatherMap;
+using DevangsWeather.Providers.wwo;
 using DevangsWeather.Service;
 using DevangsWeather.Service.WeatherProviderAdapters;
 using DevangsWeather.WeatherProviderAdapters;
@@ -40,13 +41,27 @@ namespace DevangsWeather.Details.ViewModels
 
             };
 
+            HistoricCollection = new SeriesCollection
+            {
+
+
+            };
+
             Labels = new[] {"" };
-            
+            HistoricLabels = new[] { "" };
+
 
         }
     public SeriesCollection SeriesCollection { get; set; }
     public string[] Labels { get; set; }
-    public Func<double, string> YFormatter { get; set; }
+        
+
+
+        public Func<double, string> YFormatter { get; set; }
+
+
+        public SeriesCollection HistoricCollection { get; set; }
+        public string[]  HistoricLabels { get; set; }
 
     public void ConfirmNavigationRequest(NavigationContext navigationContext, Action<bool> continuationCallback)
         {
@@ -63,8 +78,8 @@ namespace DevangsWeather.Details.ViewModels
             //}
         }
 
-        private CityWeather currentWeather = null;
-        public CityWeather CurrentWeather
+        private CurrentWeather currentWeather = null;
+        public CurrentWeather CurrentWeather
         {
             get { return currentWeather; }
             set
@@ -73,28 +88,28 @@ namespace DevangsWeather.Details.ViewModels
                 OnPropertyChanged(() => CurrentWeather);
             }
         }
-        private CityForcast forecastWeather = null;
-        public CityForcast ForecastWeather
+        private WeatherForcast forecastWeather = null;
+        public WeatherForcast ForecastWeather
         {
             get { return forecastWeather; }
             set
             {
                 forecastWeather = value;
                 OnPropertyChanged(() => ForecastWeather);
-                PopulateGraphData(value);
+                PopulateForceastGraphData(value);
             }
         }
 
-        private void PopulateGraphData(CityForcast forecast)
+        private void PopulateForceastGraphData(WeatherForcast forecast)
         {
             ChartValues<float> minPlot = new ChartValues<float>();
             ChartValues<float> maxPlot = new ChartValues<float>();
             List<String> dates = new List<string>();
-            foreach (Weather w in forecast.Forecast)
+            foreach (WeatherTemplate w in forecast.Forecast)
             {
-                minPlot.Add(w.BasicTempreture.TempMin);
-                maxPlot.Add(w.BasicTempreture.TempMax);
-                dates.Add(w.Date.Date.ToShortDateString());
+                minPlot.Add(float.Parse(w.mintempC));
+                maxPlot.Add(float.Parse(w.maxtempC));
+                dates.Add(w.date);
             }
 
             SeriesCollection.Clear();
@@ -114,13 +129,43 @@ namespace DevangsWeather.Details.ViewModels
             Labels = dates.ToArray();
         }
 
-        private ObservableCollection<CityWeather> weatherHistory = new ObservableCollection<CityWeather>();
-        public ObservableCollection<CityWeather> WeatherHistory
+        private void PopulateHistoryGraphData()
+        {
+            ChartValues<float> minPlot = new ChartValues<float>();
+            ChartValues<float> maxPlot = new ChartValues<float>();
+            List<String> dates = new List<string>();
+            foreach (WeatherTemplate w in WeatherHistory)
+            {
+                minPlot.Add(float.Parse(w.mintempC));
+                maxPlot.Add(float.Parse(w.maxtempC));
+                dates.Add(w.date);
+            }
+
+            HistoricCollection.Clear();
+
+            HistoricCollection.Add(new LineSeries
+            {
+                Title = "Min Tempreture",
+                Values = minPlot
+            });
+
+            HistoricCollection.Add(new LineSeries
+            {
+                Title = "Max Tempreture",
+                Values = maxPlot
+            });
+
+            HistoricLabels = dates.ToArray();
+        }
+
+        private ObservableCollection<WeatherTemplate> weatherHistory = new ObservableCollection<WeatherTemplate>();
+        public ObservableCollection<WeatherTemplate> WeatherHistory
         {
             get { return weatherHistory; }
             set
             {
                 weatherHistory = value;
+                PopulateHistoryGraphData();
                 OnPropertyChanged(() => WeatherHistory);
             }
         }
@@ -155,34 +200,34 @@ namespace DevangsWeather.Details.ViewModels
 
         private async void LoadCityHistoric(string cityName)
         {
-            
-            IOpenWeatherMapApiClient client = new OpenWeatherMapApiClient(new OpenWeatherMapOptions() { ApiKey = "b92f7c085494459336fc2fb33654f2f6" });
-            IWeatherProviderAdapter adapter = new OpenWeatherMapAdapter(client);
+
+            IWWOClient client = new WWOClient(unityContainer.Resolve<String>("apiKey"));
+            IWeatherProviderAdapter adapter = new WWOAdapter(client);
             IWeatherService service = new WeatherService(adapter);
-            IList<CityWeather> w = await service.GetWeatherHistory(cityName);
+            WeatherHistoric w = await service.GetWeatherForLastWeek(cityName);
             
-            WeatherHistory = new ObservableCollection<CityWeather>(w);
+            WeatherHistory = new ObservableCollection<WeatherTemplate>(w.Historic);
         }
 
         private async void LoadCityForecast(string cityName)
         {
-            IOpenWeatherMapApiClient client = new OpenWeatherMapApiClient(new OpenWeatherMapOptions() { ApiKey = "b92f7c085494459336fc2fb33654f2f6" });
-            IWeatherProviderAdapter adapter = new OpenWeatherMapAdapter(client);
+            IWWOClient client = new WWOClient(unityContainer.Resolve<String>("apiKey"));
+            IWeatherProviderAdapter adapter = new WWOAdapter(client);
             IWeatherService service = new WeatherService(adapter);
-           CityForcast forecast = await service.GetWeatherForNextWeek(cityName,7);
+           WeatherForcast forecast = await service.GetWeatherForNextWeek(cityName);
             ForecastWeather = forecast;
         }
 
         private async void LoadCityWeather(string cityName)
         {
-            IOpenWeatherMapApiClient client = new OpenWeatherMapApiClient(new OpenWeatherMapOptions() { ApiKey = "b92f7c085494459336fc2fb33654f2f6" });
-            IWeatherProviderAdapter adapter = new OpenWeatherMapAdapter(client);
+            IWWOClient client = new WWOClient(unityContainer.Resolve<String>("apiKey"));
+            IWeatherProviderAdapter adapter = new WWOAdapter(client);
             IWeatherService service = new WeatherService(adapter);
-            CityWeather weather = null;
+            DevangsWeather.Model.CurrentWeather weather = null;
             IsLoading = true;
-            weather = await service.GetTodaysWeather(cityName);
+            weather = await service.GetCurrentWeather(cityName);
             CurrentWeather = weather;
-            CurrentCity = weather.City.CityName;
+            CurrentCity = weather.CityName;
             IsLoading = false;
         }
 

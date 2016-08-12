@@ -16,11 +16,13 @@ namespace DevangsWeather.CommonInfra
                 {
                     case "thunderstorm":
                         return "/WeatherHome;component/Resources/thunderstorm.png";
-                    case "showerrain":
+                    case "rain":
                         return "/WeatherHome;component/Resources/showerrain.png";
                     case "raind":
                         return "/WeatherHome;component/Resources/raind.png";
-                    case "brokenclouds":
+                    case "haze":
+                        return "/WeatherHome;component/Resources/haze.png";
+                    case "cloudy":
                         return "/WeatherHome;component/Resources/brokenclouds.png";
                     case "rainn":
                         return "/WeatherHome;component/Resources/rainn.png";
@@ -28,6 +30,8 @@ namespace DevangsWeather.CommonInfra
                         return "/WeatherHome;component/Resources/fewclouds.png";
                     case "snow":
                         return "/WeatherHome;component/Resources/snow.png";
+                    case "sunny":
+                        return "/WeatherHome;component/Resources/clearskyd.png";
                     case "unknown":
                         return "/WeatherHome;component/Resources/unknown.png";
                     case "scattercloudsn":

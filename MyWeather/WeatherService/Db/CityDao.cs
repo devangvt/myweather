@@ -10,25 +10,33 @@ namespace DevangsWeather.Service.Db
 {
     public class CityDao
     {
-        public static void AddCity(City city)
+        private object locker = new object();
+        public void AddCity(City city)
         {
-            using (var db = new LiteDatabase(@"WeatherData.db"))
+            lock (locker)
             {
-                // Get customer collection
-                var cities = db.GetCollection<City>("city");
-
-                var foundCities = cities.Find(x => x.CityName.Equals(city.CityName));
-
-                if(foundCities.Count() == 0)
+                using (var db = new LiteDatabase(@"WeatherData.db"))
                 {
-                    cities.Insert(city);
-                    // Index document using a document property
-                    cities.EnsureIndex(x => x.CityName);
+                    // Get customer collection
+                    var cities = db.GetCollection<City>("city");
+
+                    var foundCities = cities.Find(x => x.CityName.Equals(city.CityName));
+
+                    if (foundCities.Count() == 0)
+                    {
+
+
+                        cities.EnsureIndex(x => x.Id);
+                        // Index document using a document property
+                        cities.EnsureIndex(x => x.CityName);
+
+                        cities.Insert(city);
+                    }
                 }
             }
         }
 
-        public static City GetCity(String cityName)
+        public  City GetCity(String cityName)
         {
             using (var db = new LiteDatabase(@"WeatherData.db"))
             {
@@ -38,7 +46,18 @@ namespace DevangsWeather.Service.Db
             }
         }
 
-        public static IEnumerable<City> GetCities()
+        public  void RemoveCity(String cityName)
+        {
+            using (var db = new LiteDatabase(@"WeatherData.db"))
+            {
+                // Get customer collection
+                var cities = db.GetCollection<City>("city");
+                var cityToDelete = GetCity(cityName);
+                cities.Delete(cityToDelete.Id);
+            }
+        }
+
+        public  IEnumerable<City> GetCities()
         {
             using (var db = new LiteDatabase(@"WeatherData.db"))
             {

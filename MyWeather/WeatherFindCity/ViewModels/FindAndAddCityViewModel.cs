@@ -10,6 +10,7 @@ using Prism.Regions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System;
+using DevangsWeather.Providers.wwo;
 
 namespace DevangsWeather.FindCity.ViewModels
 {
@@ -40,11 +41,12 @@ namespace DevangsWeather.FindCity.ViewModels
         }
         private void AddCity(object obj)
         {
-            IOpenWeatherMapApiClient client = new OpenWeatherMapApiClient(new OpenWeatherMapOptions() { ApiKey = "b92f7c085494459336fc2fb33654f2f6" });
-            IWeatherProviderAdapter adapter = new OpenWeatherMapAdapter(client);
+
+            IWWOClient client = new WWOClient(unityContainer.Resolve<String>("apiKey"));
+            IWeatherProviderAdapter adapter = new WWOAdapter(client);
             IWeatherService service = new WeatherService(adapter);
             service.AddCity(Result);
-            CityWeather weather = Task.Run(() => service.GetTodaysWeather(Result.CityName)).GetAwaiter().GetResult();
+            //CurrentWeather weather = Task.Run(() => service.GetCurrentWeather(Result.CityName)).GetAwaiter().GetResult();
             this.regionManager.RequestNavigate("MainContentRegion", "WeatherHome");
         }
 
@@ -65,17 +67,30 @@ namespace DevangsWeather.FindCity.ViewModels
 
         private void SearchCity(object data)
         {
-            IOpenWeatherMapApiClient client = new OpenWeatherMapApiClient(new OpenWeatherMapOptions() { ApiKey = "b92f7c085494459336fc2fb33654f2f6" });
-            IWeatherProviderAdapter adapter = new OpenWeatherMapAdapter(client);
-            IWeatherService service = new WeatherService(adapter);
-            City city = Task.Run(() => service.FindCityByName(data.ToString())).GetAwaiter().GetResult();
-            if(city!= null)
+            if (!string.IsNullOrEmpty(data.ToString()))
             {
-                Result = city;
+                IWWOClient client = new WWOClient(unityContainer.Resolve<String>("apiKey"));
+                IWeatherProviderAdapter adapter = new WWOAdapter(client);
+                IWeatherService service = new WeatherService(adapter);
+                City city = null;
+                try
+                {
+                    city = Task.Run(() => service.GetCityByName(data.ToString())).GetAwaiter().GetResult();
+                }
+                catch
+                {
 
-            }else
-            {
-                Result = null;
+                }
+                
+                if (city != null)
+                {
+                    Result = city;
+
+                }
+                else
+                {
+                    Result = null;
+                }
             }
         }
 

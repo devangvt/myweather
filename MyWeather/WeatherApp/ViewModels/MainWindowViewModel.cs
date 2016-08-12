@@ -33,8 +33,7 @@ namespace DevangsWeather.App.ViewModels
 
         private void AddCity(object data)        {
            
-            this.regionManager.RequestNavigate("MainContentRegion", "FindAndAddCity");
-           
+            this.regionManager.RequestNavigate("MainContentRegion", "FindAndAddCity");          
 
         }
 
@@ -64,9 +63,7 @@ namespace DevangsWeather.App.ViewModels
 
         private void GoHome(object data)
         {
-
             this.regionManager.RequestNavigate("MainContentRegion", "WeatherHome");
-
 
         }
 

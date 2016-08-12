@@ -8,19 +8,24 @@ using DevangsWeather.App.Views;
 using DevangsWeather.Home;
 using DevangsWeather.Details;
 using DevangsWeather.FindCity;
+using System.Configuration;
 
 namespace DevangsWeather.App
 {
     class Bootstrapper : UnityBootstrapper
     {
+        private string apiKeyWWO = null;
         protected override DependencyObject CreateShell()
         {
+            apiKeyWWO = ConfigurationManager.AppSettings["apiKeyWWO"];
+            Container.RegisterInstance(typeof(String), "apiKey", apiKeyWWO);
             return Container.Resolve<MainWindow>();
         }
 
         protected override void InitializeShell()
         {
-            base.InitializeModules();
+           
+            base.InitializeModules();            
             Application.Current.MainWindow.Show();
         }
 

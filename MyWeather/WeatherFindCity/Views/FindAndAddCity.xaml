@@ -10,7 +10,7 @@
             <RowDefinition Height="150"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Find City" FontSize="25"></TextBlock>
+        <TextBlock Grid.Row="0" Margin="5" Text="Find City" FontSize="25"></TextBlock>
         <materialDesign:ColorZone Mode="Inverted" Grid.Row="1" Margin="50 8 50 0"  CornerRadius="2" materialDesign:ShadowAssist.ShadowDepth="Depth2">
         <StackPanel  Orientation="Horizontal" Margin="10 10 10 10">
             <Button Style="{DynamicResource MaterialDesignToolButton}" 
@@ -30,15 +30,16 @@
                 <ColumnDefinition Width="400"/>
                 <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock FontSize="25" Grid.Column="0" Text="{Binding Result.CityName}" TextAlignment="Center"></TextBlock>
-                <TextBlock FontSize="25" Grid.Column="0" Text=" " TextAlignment="Center"></TextBlock>
-                <TextBlock FontSize="25" Grid.Column="0" Text="{Binding Result.Coordinates.Longitude}" TextAlignment="Center"></TextBlock>
-                <TextBlock FontSize="25" Grid.Column="0" Text=" " TextAlignment="Center"></TextBlock>
-                <TextBlock FontSize="25" Grid.Column="0" Text="{Binding Result.Coordinates.Lattitude}" TextAlignment="Center"></TextBlock>
+                <TextBlock FontSize="25" Grid.Column="0" Text="(" TextAlignment="Center"></TextBlock>
+                <TextBlock FontSize="25" Grid.Column="0" Text="{Binding Result.Region}" TextAlignment="Center"></TextBlock>
+                <TextBlock FontSize="25" Grid.Column="0" Text=", " TextAlignment="Center"></TextBlock>
+                <TextBlock FontSize="25" Grid.Column="0" Text="{Binding Result.Country}" TextAlignment="Center"></TextBlock>
+                <TextBlock FontSize="25" Grid.Column="0" Text=")" TextAlignment="Center"></TextBlock>
             </StackPanel>
             
-            <Button  Grid.Column="1" Style="{DynamicResource MaterialDesignRaisedDarkButton}" Command="{Binding AddCityCommand}">Add</Button>
+            <Button  Grid.Column="1" Style="{DynamicResource MaterialDesignRaisedDarkButton}" Width="100" Command="{Binding AddCityCommand}">Add</Button>
         </Grid>
     </Grid>
 </UserControl>

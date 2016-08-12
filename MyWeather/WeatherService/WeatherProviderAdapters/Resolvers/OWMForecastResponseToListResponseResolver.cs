@@ -23,7 +23,7 @@ namespace DevangsWeather.Service.WeatherProviderAdapters
                 w.BasicTempreture = new BasicTempreture();
                 w.BasicTempreture.TempMin = l.Temp.Min;
                 w.BasicTempreture.TempMax = l.Temp.Max;
-                w.Message = evaluateMessage(l.Weather.FirstOrDefault().Main);
+                //w.Message = evaluateMessage(l.Weather.FirstOrDefault().Main);
                 w.Description = l.Weather.FirstOrDefault().Description;
                 w.Date = Helper.ConverterUtils.ConvertUnixTimeStampToDateTime(l.Dt);
                 w.Icon = ConvertToMyicon(l.Weather.Count > 0 ? l.Weather[0].Icon : "unknown"); ;

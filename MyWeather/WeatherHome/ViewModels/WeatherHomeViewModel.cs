@@ -1,8 +1,10 @@
 ﻿using DevangsWeather.Model;
 using DevangsWeather.OpenWeatherMap;
+using DevangsWeather.Providers.wwo;
 using DevangsWeather.Service;
 using DevangsWeather.Service.WeatherProviderAdapters;
 using DevangsWeather.WeatherProviderAdapters;
+using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -20,30 +22,44 @@ namespace DevangsWeather.Home.ViewModels
     public class WeatherHomeViewModel: BindableBase, IConfirmNavigationRequest
     {
         private readonly DelegateCommand<object> showDetailsCommand;
+        private readonly DelegateCommand<object> removeCityCommand;
         private readonly IRegionManager regionManager = null;
+        private readonly IUnityContainer container = null;
 
-        
-        public WeatherHomeViewModel(IRegionManager regionManager)
+
+
+        public WeatherHomeViewModel(IRegionManager regionManager,IUnityContainer container)
         {
+            this.container = container;
             this.regionManager = regionManager;
             this.showDetailsCommand = new DelegateCommand<object>(ShowDetails, CanShowDetails);
-            PopulateCities();
+            this.removeCityCommand = new DelegateCommand<object>(RemoveCity);
+            Task.Run(()=> PopulateCities());
         }
 
         private void PopulateCities()
         {
-
-            IOpenWeatherMapApiClient client = new OpenWeatherMapApiClient(new OpenWeatherMapOptions() { ApiKey = "b92f7c085494459336fc2fb33654f2f6" });
-            IWeatherProviderAdapter adapter = new OpenWeatherMapAdapter(client);
+            IsLoading = true;
+            IWWOClient client = new WWOClient(container.Resolve<String>("apiKey"));
+            IWeatherProviderAdapter adapter = new WWOAdapter(client);
             IWeatherService service = new WeatherService(adapter);
-            IList<CityWeather> weather = Task.Run(() => service.FindAllCities()).GetAwaiter().GetResult();
-            CityCollection = new ObservableCollection<CityWeather>(weather);
+            IList<CurrentWeather> weather = Task.Run(() => service.FindAllCityCurrentWeather()).GetAwaiter().GetResult();
+            CityCollection = new ObservableCollection<CurrentWeather>(weather);
+            IsLoading = false;
         }
 
-       
 
-        private ObservableCollection<CityWeather> cityCollection;
-        public ObservableCollection<CityWeather> CityCollection
+        private bool isLoading = false;
+        public bool IsLoading
+        {
+            get { return isLoading; }
+            set {
+                isLoading = value;
+                OnPropertyChanged(() => IsLoading);
+            }
+        }
+        private ObservableCollection<CurrentWeather> cityCollection;
+        public ObservableCollection<CurrentWeather> CityCollection
         {
             get { return cityCollection; }
             set {
@@ -54,10 +70,18 @@ namespace DevangsWeather.Home.ViewModels
 
         private void ShowDetails(object data)
         {
-            if (data is CityWeather)             {
-                this.regionManager.RequestNavigate("MainContentRegion", "WeatherDetails?City="+ ((CityWeather)data).City.CityName);
+            if (data is CurrentWeather)             {
+                this.regionManager.RequestNavigate("MainContentRegion", "WeatherDetails?City="+ ((CurrentWeather)data).CityName);
             }
 
+        }
+
+        private void RemoveCity(object data)
+        {
+            IWWOClient client = new WWOClient(container.Resolve<String>("apiKey"));
+            IWeatherProviderAdapter adapter = new WWOAdapter(client);
+            IWeatherService service = new WeatherService(adapter);
+            Task.Run(() => service.RemoveCity(((CurrentWeather)data).CityName)).ContinueWith((x)=> { PopulateCities(); });
         }
 
         private bool CanShowDetails(object ignored)
@@ -88,6 +112,11 @@ namespace DevangsWeather.Home.ViewModels
         public ICommand ShowDetailsCommand
         {
             get { return this.showDetailsCommand; }
+        }
+
+        public ICommand RemoveCityCommand
+        {
+            get { return this.removeCityCommand; }
         }
 
     }

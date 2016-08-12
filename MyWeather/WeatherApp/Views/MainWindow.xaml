@@ -22,11 +22,12 @@
                         ToolTip="MaterialDesignFloatingActionMiniLightButton">
                         <materialDesign:PackIcon Kind="Home"  Height="30" Width="30" />
                     </Button>
-                    <materialDesign:PopupBox DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
-                    <StackPanel>
-                            <Button Content="Add City" Command="{Binding AddCityCommand}"/>
-                    </StackPanel>
-                </materialDesign:PopupBox>
+                    <Button Command="{Binding AddCityCommand}"  DockPanel.Dock="Right"  Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
+                        HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                         Panel.ZIndex="50">
+                        <materialDesign:PackIcon Kind="Plus" />
+                    </Button>
+                    
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource MaterialDesignDisplay1TextBlock}">Devang's Weather App</TextBlock>
                 </DockPanel>
             </materialDesign:ColorZone>
