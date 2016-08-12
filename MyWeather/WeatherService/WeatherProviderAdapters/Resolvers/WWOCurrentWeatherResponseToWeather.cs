@@ -2,10 +2,7 @@
 using DevangsWeather.Model;
 using DevangsWeather.Providers.wwo.Contracts;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevangsWeather.Service.WeatherProviderAdapters.Resolvers
 {

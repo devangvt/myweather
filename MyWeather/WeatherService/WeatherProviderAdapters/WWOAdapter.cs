@@ -1,8 +1,4 @@
-﻿using DevangsWeather.WeatherProviderAdapters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
 using DevangsWeather.Model;
 using DevangsWeather.Providers.wwo;

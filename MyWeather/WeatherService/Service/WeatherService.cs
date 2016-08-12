@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using DevangsWeather.Model;
 using DevangsWeather.WeatherProviderAdapters;
 using DevangsWeather.Service.Db;
 using System.Reflection;
-using DevangsWeather.Service.WeatherProviderAdapters;
 
 namespace DevangsWeather.Service
 {

@@ -1,11 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DevangsWeather.OpenWeatherMap;
-using DevangsWeather.Service.WeatherProviderAdapters;
-using System.Threading.Tasks;
-using DevangsWeather.Model;
-using FakeItEasy;
-using System.Collections.Generic;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DevangsWeather.WeatherServiceTest
 {

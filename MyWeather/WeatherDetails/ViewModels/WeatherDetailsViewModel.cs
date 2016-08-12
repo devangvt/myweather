@@ -1,8 +1,6 @@
 ﻿using DevangsWeather.Model;
-using DevangsWeather.OpenWeatherMap;
 using DevangsWeather.Providers.wwo;
 using DevangsWeather.Service;
-using DevangsWeather.Service.WeatherProviderAdapters;
 using DevangsWeather.WeatherProviderAdapters;
 using LiveCharts;
 using LiveCharts.Wpf;
@@ -14,9 +12,6 @@ using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevangsWeather.Details.ViewModels
 {

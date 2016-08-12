@@ -1,7 +1,5 @@
 ﻿using DevangsWeather.Model;
-using DevangsWeather.OpenWeatherMap;
 using DevangsWeather.Service;
-using DevangsWeather.Service.WeatherProviderAdapters;
 using DevangsWeather.WeatherProviderAdapters;
 using Microsoft.Practices.Unity;
 using Prism.Commands;

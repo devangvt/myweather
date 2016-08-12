@@ -40,14 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Basic.cs" />
     <Compile Include="City.cs" />
-    <Compile Include="CityForcast.cs" />
-    <Compile Include="CityWeather.cs" />
     <Compile Include="Coordinates.cs" />
     <Compile Include="CurrentWeather.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Weather.cs" />
     <Compile Include="WeatherForcast.cs" />
     <Compile Include="WeatherHistoric.cs" />
     <Compile Include="WeatherTemplate.cs" />

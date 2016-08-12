@@ -1,6 +1,6 @@
 ﻿using DevangsWeather.Model;
 using System;
-using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace DevangsWeather.Service.WeatherProviderAdapters
 {
@@ -47,36 +47,49 @@ namespace DevangsWeather.Service.WeatherProviderAdapters
 
         protected String ConvertToMyicon(string v)
         {
-            if (v.ToLower().Contains("rain")){
-                return "rain";
-            }
-            if (v.ToLower().Contains("sunny"))
-            {
-                return "sunny";
-            }
-            if (v.ToLower().Contains("thunderstom"))
-            {
-                return "thunderstorm";
-            }
 
-            if (v.ToLower().ToLower().Contains("snow"))
-            {
-                return "snow";
-            }
+            
+            string[] keys = new string[] { "rain", "sunny","thunderstorm","snow","cloudy","clear","haze","mist" };
+            return keys.FirstOrDefault<string>(s => v.ToLower().Contains(s));
+           
+            //switch (v.Contains(""))
+            //{
+                
+            //}
+            //if (v.ToLower().Contains("rain")){
+            //    return "rain";
+            //}
+            //if (v.ToLower().Contains("sunny"))
+            //{
+            //    return "sunny";
+            //}
+            //if (v.ToLower().Contains("thunderstom"))
+            //{
+            //    return "thunderstorm";
+            //}
 
-            if (v.ToLower().Contains("cloudy"))
-            {
-                return "cloudy";
-            }
+            //if (v.ToLower().ToLower().Contains("snow"))
+            //{
+            //    return "snow";
+            //}
 
-            if (v.ToLower().Contains("clear"))
-            {
-                return "clear";
-            }
-            if (v.ToLower().Contains("haze"))
-            {
-                return "haze";
-            }
+            //if (v.ToLower().Contains("cloudy"))
+            //{
+            //    return "cloudy";
+            //}
+
+            //if (v.ToLower().Contains("clear"))
+            //{
+            //    return "clear";
+            //}
+            //if (v.ToLower().Contains("haze"))
+            //{
+            //    return "haze";
+            //}
+            //if (v.ToLower().Contains("mist"))
+            //{
+            //    return "haze";
+            //}
 
             //if (!String.IsNullOrWhiteSpace(Regex.Match(v, "^2").Value))
             //{

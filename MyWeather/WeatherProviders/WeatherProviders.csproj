@@ -44,25 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OpenWeatherMap\Contracts\City.cs" />
-    <Compile Include="OpenWeatherMap\Contracts\List.cs" />
-    <Compile Include="OpenWeatherMap\Contracts\Temp.cs" />
-    <Compile Include="OpenWeatherMap\OpenWeatherMapForcastResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="OpenWeatherMap\Contracts\Cloud.cs" />
-    <Compile Include="OpenWeatherMap\Contracts\Coord.cs" />
-    <Compile Include="OpenWeatherMap\Contracts\Main.cs" />
-    <Compile Include="OpenWeatherMap\Contracts\Sys.cs" />
-    <Compile Include="OpenWeatherMap\Contracts\Weather.cs" />
-    <Compile Include="OpenWeatherMap\Contracts\Wind.cs" />
-    <Compile Include="OpenWeatherMap\Extensions\FormattingExtensions.cs" />
-    <Compile Include="OpenWeatherMap\IOpenWeatherMapApiClient.cs" />
-    <Compile Include="OpenWeatherMap\OpenWeatherMapApiClient.cs" />
-    <Compile Include="OpenWeatherMap\OpenWeatherMapOptions.cs" />
-    <Compile Include="OpenWeatherMap\OpenWeatherMapResponse.cs" />
-    <Compile Include="OpenWeatherMap\Settings\SearchAccuracy.cs" />
-    <Compile Include="OpenWeatherMap\Settings\SupportedLanguage.cs" />
-    <Compile Include="OpenWeatherMap\Settings\UnitsFormat.cs" />
     <Compile Include="wwo\Contracts\AreaName.cs" />
     <Compile Include="wwo\Contracts\Country.cs" />
     <Compile Include="wwo\Contracts\CurrentCondition.cs" />

@@ -53,8 +53,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Db\CityDao.cs" />
-    <Compile Include="Db\CityForcastDao.cs" />
-    <Compile Include="Db\CityWeatherDao.cs" />
     <Compile Include="Db\CurrentWeatherDao.cs" />
     <Compile Include="Db\WeatherForcastDao.cs" />
     <Compile Include="Db\WeatherHistoricDao.cs" />
@@ -65,9 +63,6 @@
     <Compile Include="WeatherProviderAdapters\IWeatherProviderAdapter.cs" />
     <Compile Include="WeatherProviderAdapters\Resolvers\BaseResolver.cs" />
     <Compile Include="WeatherProviderAdapters\IWeatherProviderAdapter_old.cs" />
-    <Compile Include="WeatherProviderAdapters\Resolvers\OpenWeatherMapResponseToWeatherResolver.cs" />
-    <Compile Include="WeatherProviderAdapters\OpenWeatherMapAdapter.cs" />
-    <Compile Include="WeatherProviderAdapters\Resolvers\OWMForecastResponseToListResponseResolver.cs" />
     <Compile Include="WeatherProviderAdapters\Resolvers\WWOWeatherResponseToWeatherHistoric.cs" />
     <Compile Include="WeatherProviderAdapters\Resolvers\WWOWeatherResponseToWeatherForecast.cs" />
     <Compile Include="WeatherProviderAdapters\Resolvers\WWOCurrentWeatherResponseToWeather.cs" />

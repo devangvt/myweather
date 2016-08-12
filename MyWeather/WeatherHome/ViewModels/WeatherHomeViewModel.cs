@@ -1,8 +1,6 @@
 ﻿using DevangsWeather.Model;
-using DevangsWeather.OpenWeatherMap;
 using DevangsWeather.Providers.wwo;
 using DevangsWeather.Service;
-using DevangsWeather.Service.WeatherProviderAdapters;
 using DevangsWeather.WeatherProviderAdapters;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
@@ -11,9 +9,6 @@ using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 

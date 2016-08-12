@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace DevangsWeather.CommonInfra
@@ -21,6 +17,7 @@ namespace DevangsWeather.CommonInfra
                     case "raind":
                         return "/WeatherHome;component/Resources/raind.png";
                     case "haze":
+                    case "mist":
                         return "/WeatherHome;component/Resources/haze.png";
                     case "cloudy":
                         return "/WeatherHome;component/Resources/brokenclouds.png";

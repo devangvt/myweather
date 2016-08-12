@@ -2,7 +2,6 @@
 using Prism.Mvvm;
 using Prism.Regions;
 using System.Windows.Input;
-using System;
 using System.Windows;
 
 namespace DevangsWeather.App.ViewModels

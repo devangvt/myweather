@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace DevangsWeather.Providers.wwo.Contracts
+﻿namespace DevangsWeather.Providers.wwo.Contracts
 {
     public class Result
     {

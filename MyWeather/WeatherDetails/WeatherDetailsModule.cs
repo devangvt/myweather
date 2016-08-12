@@ -1,7 +1,6 @@
 ﻿using DevangsWeather.Details.Views;
 using Prism.Modularity;
 using Prism.Regions;
-using System;
 
 namespace DevangsWeather.Details
 {
