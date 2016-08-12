@@ -9,16 +9,20 @@ namespace DevangsWeather.Service.WeatherProviderAdapters.Resolvers
     {
         public City Convert(WWOSearchResponse source, City destination, ResolutionContext context)
         {
-            destination = new City();
-            destination.CityName = source.search_api.result.FirstOrDefault().areaName.FirstOrDefault().value;
-            destination.Coordinates = new Coordinates
+            
+            if (source.search_api.result.Count() > 0)
             {
-                Lattitude = float.Parse(source.search_api.result.FirstOrDefault().latitude),
-                Longitude = float.Parse(source.search_api.result.FirstOrDefault().longitude)
-            };
-            destination.Region = source.search_api.result.FirstOrDefault().region.FirstOrDefault().value;
-            destination.Country = source.search_api.result.FirstOrDefault().country.FirstOrDefault().value;
-
+                var result = source.search_api.result.FirstOrDefault();
+                destination = new City();
+                destination.CityName = result.areaName.FirstOrDefault().value;
+                destination.Coordinates = new Coordinates
+                {
+                    Lattitude = float.Parse(result.latitude),
+                    Longitude = float.Parse(result.longitude)
+                };
+                destination.Region = result.region.FirstOrDefault().value;
+                destination.Country = result.country.FirstOrDefault().value;
+            }
             return destination;
         }
     }

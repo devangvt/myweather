@@ -29,8 +29,7 @@ namespace DevangsWeather.CommonInfra
                         return "/WeatherHome;component/Resources/snow.png";
                     case "sunny":
                         return "/WeatherHome;component/Resources/clearskyd.png";
-                    case "unknown":
-                        return "/WeatherHome;component/Resources/unknown.png";
+                    
                     case "scattercloudsn":
                         return "/WeatherHome;component/Resources/scattercloudsn.png";
                     case "scattercloudsd":
@@ -40,7 +39,9 @@ namespace DevangsWeather.CommonInfra
                     case "clearskyn":
                         return "/WeatherHome;component/Resources/clearskyn.png";
 
-
+                    case "unknown":
+                    default:                    
+                        return "/WeatherHome;component/Resources/unknown.png";
 
                 }
             return null;
